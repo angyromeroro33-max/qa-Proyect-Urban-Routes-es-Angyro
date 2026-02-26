@@ -1,4 +1,7 @@
 import data
+import json
+import time
+from selenium.common import WebDriverException
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
@@ -12,9 +15,7 @@ def retrieve_phone_code(driver) -> str:
     Utilízalo cuando la aplicación espere el código de confirmación para pasarlo a tus pruebas.
     El código de confirmación del teléfono solo se puede obtener después de haberlo solicitado en la aplicación."""
 
-    import json
-    import time
-    from selenium.common import WebDriverException
+
     code = None
     for i in range(10):
         try:
@@ -53,6 +54,9 @@ class UrbanRoutesPage:
     def get_to(self):
         return self.driver.find_element(*self.to_field).get_property('value')
 
+        def set_route(self, from_address, to_address):
+            self.set_from(from_address)
+            self.set_to(to_address)
 
 
 class TestUrbanRoutes:
@@ -65,14 +69,21 @@ class TestUrbanRoutes:
         from selenium.webdriver import DesiredCapabilities
         capabilities = DesiredCapabilities.CHROME
         capabilities["goog:loggingPrefs"] = {'performance': 'ALL'}
-        cls.driver = webdriver.Chrome(desired_capabilities=capabilities)
+        from selenium.webdriver.chrome.options import Options
+
+        chrome_options = Options()
+        chrome_options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
+
+        cls.driver = webdriver.Chrome(options=chrome_options)
 
     def test_set_route(self):
         self.driver.get(data.urban_routes_url)
         routes_page = UrbanRoutesPage(self.driver)
         address_from = data.address_from
         address_to = data.address_to
-        routes_page.set_route(address_from, address_to)
+        time.sleep(5)
+        routes_page.set_from(address_from)
+        routes_page.set_to(address_to)
         assert routes_page.get_from() == address_from
         assert routes_page.get_to() == address_to
 
