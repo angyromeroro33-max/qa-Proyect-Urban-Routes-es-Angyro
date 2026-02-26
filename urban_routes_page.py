@@ -1,3 +1,4 @@
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -5,6 +6,9 @@ from urban_routes_locators import UrbanRoutesLocators
 
 
 class UrbanRoutesPage:
+    from_field =(By.ID, 'from')
+    to_field =(By.ID, 'to')
+    comfort_tariff = (By.XPATH, "//img[@alt='Comfort']")
 
     def __init__(self, driver):
         self.driver = driver

@@ -38,6 +38,7 @@ def retrieve_phone_code(driver) -> str:
 class UrbanRoutesPage:
     from_field = (By.ID, 'from')
     to_field = (By.ID, 'to')
+    comfort_tariff = (By.XPATH, "//img[@alt='Comfort']/../..")
 
     def __init__(self, driver):
         self.driver = driver
@@ -54,9 +55,12 @@ class UrbanRoutesPage:
     def get_to(self):
         return self.driver.find_element(*self.to_field).get_property('value')
 
-        def set_route(self, from_address, to_address):
+    def set_route(self, from_address, to_address):
             self.set_from(from_address)
             self.set_to(to_address)
+
+    def select_comfort(self):
+            self.driver.find_element(*self.comfort_tariff).click()
 
 
 class TestUrbanRoutes:
@@ -87,6 +91,17 @@ class TestUrbanRoutes:
         assert routes_page.get_from() == address_from
         assert routes_page.get_to() == address_to
 
+    def test_select_comfort(self):
+        self.driver.get(data.urban_routes_url)
+        routes_page = UrbanRoutesPage(self.driver)
+
+        address_from = data.address_from
+        address_to = data.address_to
+
+        routes_page.set_route(address_from, address_to)
+
+        # Aquí normalmente iría el botón pedir taxi si tu app lo requiere
+        routes_page.select_comfort()
 
     @classmethod
     def teardown_class(cls):
