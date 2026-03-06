@@ -1,5 +1,8 @@
 import pytest
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from urban_routes_page import UrbanRoutesPage
 from data import UrbanRoutesData
 
@@ -22,10 +25,9 @@ def test_complete_taxi_order(driver):
 
     page.click_request_taxi()
 
-    page.select_personal()
-
     page.select_comfort()
 
+    # escribir teléfono
     page.add_phone_number(UrbanRoutesData.PHONE_NUMBER)
 
     page.open_payment_method()
@@ -34,6 +36,7 @@ def test_complete_taxi_order(driver):
         UrbanRoutesData.CARD_NUMBER,
         UrbanRoutesData.CARD_CODE
     )
+    page.close_card_window()
 
     page.add_message_for_driver(
         UrbanRoutesData.MESSAGE_FOR_DRIVER

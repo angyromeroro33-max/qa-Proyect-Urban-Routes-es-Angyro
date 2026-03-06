@@ -39,14 +39,25 @@ class UrbanRoutesPage:
             EC.visibility_of_element_located(UrbanRoutesLocators.RESULTS_TEXT)
         ).text
 
-    def add_phone_number(self, phone):
-        self.wait.until(
-            EC.element_to_be_clickable(UrbanRoutesLocators.PHONE_BUTTON)
-        ).click()
+    def add_phone_number(self, phone_number):
+        # abrir ventana teléfono
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_BUTTON).click()
 
-        self.wait.until(
+        # esperar a que aparezca el campo
+        WebDriverWait(self.driver, 5).until(
             EC.visibility_of_element_located(UrbanRoutesLocators.PHONE_INPUT)
-        ).send_keys(phone)
+        )
+        # Escribir el telefono
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_INPUT).send_keys(phone_number)
+
+        # clic en siguiente
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_NEXT_BUTTON).click()
+
+        # escribir código
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_CODE_INPUT).send_keys("1234")
+
+        # confirmar
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_CONFIRM_BUTTON).click()
 
     def open_payment_method(self):
         self.wait.until(
@@ -69,6 +80,13 @@ class UrbanRoutesPage:
         code_field.send_keys(code)
 
         code_field.send_keys("\t")
+
+    def close_card_window(self):
+        self.wait.until(
+            EC.element_to_be_clickable(
+                UrbanRoutesLocators.CLOSE_CARD_WINDOW
+            )
+        ).click()
 
     def add_message_for_driver(self, message):
         self.wait.until(

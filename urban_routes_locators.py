@@ -7,7 +7,7 @@ class UrbanRoutesLocators:
     TO_INPUT = (By.ID, "to")
 
     # Botón pedir taxi
-    REQUEST_TAXI_BUTTON = (By.XPATH, "//button[contains(text(),'Pedir taxi')]")
+    REQUEST_TAXI_BUTTON = (By.XPATH, "//button[contains(text(),'Pedir un taxi')]")
 
     # Botón Personal
     PERSONAL_BUTTON = (By.XPATH, "//div[contains(text(),'Personal')]")
@@ -20,10 +20,27 @@ class UrbanRoutesLocators:
 
     # Teléfono
     PHONE_BUTTON = (By.XPATH, "//div[text()='Número de teléfono']")
-    PHONE_INPUT = (By.XPATH, "//input[@type='tel']")
+    PHONE_INPUT = (By.ID, "phone")
+    PHONE_NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
+
+    PHONE_CODE_INPUT = (By.ID, "code")
+    PHONE_CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
 
     # Método de pago
     PAYMENT_METHOD = (By.XPATH, "//div[text()='Método de pago']")
+
+    # Agregar tarjeta
+    ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar tarjeta']")
+    CARD_NUMBER = (By.ID, "number")
+    CARD_CODE = (By.ID, "code")
+
+    PHONE_CODE_INPUT = (By.ID, "code")
+    PHONE_CODE_INPUT = (By.ID, "code")
+
+    PHONE_CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
+
+    # Método de pago
+    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[text()='Método de pago']")
 
     # Agregar tarjeta
     ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar tarjeta']")
