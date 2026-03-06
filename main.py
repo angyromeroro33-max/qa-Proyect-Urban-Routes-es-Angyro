@@ -1,108 +1,46 @@
-import data
-import json
-import time
-from selenium.common import WebDriverException
+import pytest
 from selenium import webdriver
-from selenium.webdriver import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from urban_routes_page import UrbanRoutesPage
+from data import UrbanRoutesData
 
 
-# no modificar
-def retrieve_phone_code(driver) -> str:
-    """Este código devuelve un número de confirmación de teléfono y lo devuelve como un string.
-    Utilízalo cuando la aplicación espere el código de confirmación para pasarlo a tus pruebas.
-    El código de confirmación del teléfono solo se puede obtener después de haberlo solicitado en la aplicación."""
+@pytest.fixture
+def driver():
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    driver.get(UrbanRoutesData.URL)
+    yield driver
+    driver.quit()
 
 
-    code = None
-    for i in range(10):
-        try:
-            logs = [log["message"] for log in driver.get_log('performance') if log.get("message")
-                    and 'api/v1/number?number' in log.get("message")]
-            for log in reversed(logs):
-                message_data = json.loads(log)["message"]
-                body = driver.execute_cdp_cmd('Network.getResponseBody',
-                                              {'requestId': message_data["params"]["requestId"]})
-                code = ''.join([x for x in body['body'] if x.isdigit()])
-        except WebDriverException:
-            time.sleep(1)
-            continue
-        if not code:
-            raise Exception("No se encontró el código de confirmación del teléfono.\n"
-                            "Utiliza 'retrieve_phone_code' solo después de haber solicitado el código en tu aplicación.")
-        return code
+def test_complete_taxi_order(driver):
 
+    page = UrbanRoutesPage(driver)
 
-class UrbanRoutesPage:
-    from_field = (By.ID, 'from')
-    to_field = (By.ID, 'to')
-    comfort_tariff = (By.XPATH, "//img[@alt='Comfort']/../..")
+    page.enter_from_address(UrbanRoutesData.FROM_ADDRESS)
+    page.enter_to_address(UrbanRoutesData.TO_ADDRESS)
 
-    def __init__(self, driver):
-        self.driver = driver
+    page.click_request_taxi()
 
-    def set_from(self, from_address):
-        self.driver.find_element(*self.from_field).send_keys(from_address)
+    page.select_personal()
 
-    def set_to(self, to_address):
-        self.driver.find_element(*self.to_field).send_keys(to_address)
+    page.select_comfort()
 
-    def get_from(self):
-        return self.driver.find_element(*self.from_field).get_property('value')
+    page.add_phone_number(UrbanRoutesData.PHONE_NUMBER)
 
-    def get_to(self):
-        return self.driver.find_element(*self.to_field).get_property('value')
+    page.open_payment_method()
 
-    def set_route(self, from_address, to_address):
-            self.set_from(from_address)
-            self.set_to(to_address)
+    page.add_card(
+        UrbanRoutesData.CARD_NUMBER,
+        UrbanRoutesData.CARD_CODE
+    )
 
-    def select_comfort(self):
-            self.driver.find_element(*self.comfort_tariff).click()
+    page.add_message_for_driver(
+        UrbanRoutesData.MESSAGE_FOR_DRIVER
+    )
 
+    page.request_blanket_tissues()
 
-class TestUrbanRoutes:
+    page.add_icecream()
 
-    driver = None
-
-    @classmethod
-    def setup_class(cls):
-        # no lo modifiques, ya que necesitamos un registro adicional habilitado para recuperar el código de confirmación del teléfono
-        from selenium.webdriver import DesiredCapabilities
-        capabilities = DesiredCapabilities.CHROME
-        capabilities["goog:loggingPrefs"] = {'performance': 'ALL'}
-        from selenium.webdriver.chrome.options import Options
-
-        chrome_options = Options()
-        chrome_options.set_capability("goog:loggingPrefs", {'performance': 'ALL'})
-
-        cls.driver = webdriver.Chrome(options=chrome_options)
-
-    def test_set_route(self):
-        self.driver.get(data.urban_routes_url)
-        routes_page = UrbanRoutesPage(self.driver)
-        address_from = data.address_from
-        address_to = data.address_to
-        time.sleep(5)
-        routes_page.set_from(address_from)
-        routes_page.set_to(address_to)
-        assert routes_page.get_from() == address_from
-        assert routes_page.get_to() == address_to
-
-    def test_select_comfort(self):
-        self.driver.get(data.urban_routes_url)
-        routes_page = UrbanRoutesPage(self.driver)
-
-        address_from = data.address_from
-        address_to = data.address_to
-
-        routes_page.set_route(address_from, address_to)
-
-        # Aquí normalmente iría el botón pedir taxi si tu app lo requiere
-        routes_page.select_comfort()
-
-    @classmethod
-    def teardown_class(cls):
-        cls.driver.quit()
+    page.final_order()
