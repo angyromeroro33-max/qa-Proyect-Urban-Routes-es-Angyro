@@ -2,27 +2,59 @@ from selenium.webdriver.common.by import By
 
 
 class UrbanRoutesLocators:
+    # Campos de dirección
+    FROM_INPUT = (By.ID, "from")
+    TO_INPUT = (By.ID, "to")
 
-    FROM_FIELD = (By.ID, "from")
-    TO_FIELD = (By.ID, "to")
+    # Botón pedir taxi
+    REQUEST_TAXI_BUTTON = (By.XPATH, "//button[contains(text(),'Pedir un taxi')]")
 
-    CALL_TAXI_BUTTON = (By.CSS_SELECTOR, "button.button.round")
+    # Botón Personal
+    PERSONAL_BUTTON = (By.XPATH, "//div[contains(text(),'Personal')]")
 
-    COMFORT_TARIFF = (By.XPATH, "//div[text()='Comfort']")
+    # Tarifa Comfort
+    COMFORT_TARIFF = (By.XPATH, "//div[contains(text(),'Comfort')]")
 
-    PHONE_FIELD = (By.ID, "phone")
+    # Texto resultado taxi
+    RESULTS_TEXT = (By.CLASS_NAME, "results-text")
 
+    # Teléfono
+    PHONE_BUTTON = (By.XPATH, "//div[text()='Número de teléfono']")
+    PHONE_INPUT = (By.ID, "phone")
+    PHONE_NEXT_BUTTON = (By.XPATH, "//button[text()='Siguiente']")
+
+    PHONE_CODE_INPUT = (By.ID, "code")
+    PHONE_CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
+
+    # Método de pago
+    PAYMENT_METHOD = (By.XPATH, "//div[text()='Método de pago']")
+
+    # Agregar tarjeta
     ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar tarjeta']")
     CARD_NUMBER = (By.ID, "number")
     CARD_CODE = (By.ID, "code")
-    LINK_CARD_BUTTON = (By.XPATH, "//button[text()='Link']")
 
-    MESSAGE_FIELD = (By.ID, "comment")
+    PHONE_CODE_INPUT = (By.ID, "code")
+    PHONE_CODE_INPUT = (By.ID, "code")
 
-    BLANKET_CHECKBOX = (By.XPATH, "//span[text()='Manta y pañuelos']")
+    PHONE_CONFIRM_BUTTON = (By.XPATH, "//button[text()='Confirmar']")
 
-    ICECREAM_PLUS = (By.XPATH, "//div[@class='counter-plus']")
+    # Método de pago
+    PAYMENT_METHOD_BUTTON = (By.XPATH, "//div[text()='Método de pago']")
 
-    ORDER_TAXI_BUTTON = (By.XPATH, "//button[text()='Pedir taxi']")
+    # Agregar tarjeta
+    ADD_CARD_BUTTON = (By.XPATH, "//div[text()='Agregar tarjeta']")
+    CARD_NUMBER = (By.ID, "number")
+    CARD_CODE = (By.ID, "code")
 
-    DRIVER_MODAL = (By.CLASS_NAME, "order-details")
+    # Mensaje al conductor
+    MESSAGE_DRIVER = (By.ID, "comment")
+
+    # Manta y pañuelos
+    BLANKET_TISSUES = (By.XPATH, "//div[text()='Manta y pañuelos']/following::input[1]")
+
+    # Helado
+    ICECREAM_PLUS = (By.XPATH, "//div[text()='Helado']/following::div[contains(@class,'counter-plus')]")
+
+    # Botón final
+    FINAL_ORDER_BUTTON = (By.CLASS_NAME, "smart-button")

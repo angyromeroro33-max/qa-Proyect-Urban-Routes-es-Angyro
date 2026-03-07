@@ -1,54 +1,112 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from urban_routes_locators import UrbanRoutesLocators
 
 
 class UrbanRoutesPage:
-    from_field =(By.ID, 'from')
-    to_field =(By.ID, 'to')
-    comfort_tariff = (By.XPATH, "//img[@alt='Comfort']")
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
 
-    def set_route(self, from_address, to_address):
-        self.driver.find_element(*UrbanRoutesLocators.FROM_FIELD).send_keys(from_address)
-        self.driver.find_element(*UrbanRoutesLocators.TO_FIELD).send_keys(to_address)
+    def enter_from_address(self, address):
+        self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.FROM_INPUT)
+        ).send_keys(address)
 
-    def click_call_taxi(self):
-        self.driver.find_element(*UrbanRoutesLocators.CALL_TAXI_BUTTON).click()
+    def enter_to_address(self, address):
+        self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.TO_INPUT)
+        ).send_keys(address)
+
+    def click_request_taxi(self):
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.REQUEST_TAXI_BUTTON)
+        ).click()
+
+    def select_personal(self):
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.PERSONAL_BUTTON)
+        ).click()
 
     def select_comfort(self):
-        self.driver.find_element(*UrbanRoutesLocators.COMFORT_TARIFF).click()
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.COMFORT_TARIFF)
+        ).click()
 
-    def set_phone(self, phone):
-        self.driver.find_element(*UrbanRoutesLocators.PHONE_FIELD).send_keys(phone)
+    def get_results_text(self):
+        return self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.RESULTS_TEXT)
+        ).text
+
+    def add_phone_number(self, phone_number):
+        # abrir ventana teléfono
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_BUTTON).click()
+
+        # esperar a que aparezca el campo
+        WebDriverWait(self.driver, 5).until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.PHONE_INPUT)
+        )
+        # Escribir el telefono
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_INPUT).send_keys(phone_number)
+
+        # clic en siguiente
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_NEXT_BUTTON).click()
+
+        # escribir código
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_CODE_INPUT).send_keys("1234")
+
+        # confirmar
+        self.driver.find_element(*UrbanRoutesLocators.PHONE_CONFIRM_BUTTON).click()
+
+    def open_payment_method(self):
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.PAYMENT_METHOD)
+        ).click()
 
     def add_card(self, number, code):
-        self.driver.find_element(*UrbanRoutesLocators.ADD_CARD_BUTTON).click()
-        self.driver.find_element(*UrbanRoutesLocators.CARD_NUMBER).send_keys(number)
-        code_field = self.driver.find_element(*UrbanRoutesLocators.CARD_CODE)
-        code_field.send_keys(code)
-        code_field.send_keys(Keys.TAB)
-        self.driver.find_element(*UrbanRoutesLocators.LINK_CARD_BUTTON).click()
-
-    def write_message(self, message):
-        self.driver.find_element(*UrbanRoutesLocators.MESSAGE_FIELD).send_keys(message)
-
-    def request_blanket(self):
-        self.driver.find_element(*UrbanRoutesLocators.BLANKET_CHECKBOX).click()
-
-    def add_icecream(self, amount):
-        for _ in range(amount):
-            self.driver.find_element(*UrbanRoutesLocators.ICECREAM_PLUS).click()
-
-    def order_taxi(self):
-        self.driver.find_element(*UrbanRoutesLocators.ORDER_TAXI_BUTTON).click()
-
-    def wait_for_driver(self):
         self.wait.until(
-            EC.visibility_of_element_located(UrbanRoutesLocators.DRIVER_MODAL)
+            EC.element_to_be_clickable(UrbanRoutesLocators.ADD_CARD_BUTTON)
+        ).click()
+
+        self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.CARD_NUMBER)
+        ).send_keys(number)
+
+        code_field = self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.CARD_CODE)
         )
+
+        code_field.send_keys(code)
+
+        code_field.send_keys("\t")
+
+    def close_card_window(self):
+        self.wait.until(
+            EC.element_to_be_clickable(
+                UrbanRoutesLocators.CLOSE_CARD_WINDOW
+            )
+        ).click()
+
+    def add_message_for_driver(self, message):
+        self.wait.until(
+            EC.visibility_of_element_located(UrbanRoutesLocators.MESSAGE_DRIVER)
+        ).send_keys(message)
+
+    def request_blanket_tissues(self):
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.BLANKET_TISSUES)
+        ).click()
+
+    def add_icecream(self):
+        plus = self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.ICECREAM_PLUS)
+        )
+
+        plus.click()
+        plus.click()
+
+    def final_order(self):
+        self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.FINAL_ORDER_BUTTON)
+        ).click()
