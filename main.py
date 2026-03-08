@@ -1,5 +1,6 @@
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,9 +10,13 @@ from data import UrbanRoutesData
 
 @pytest.fixture
 def driver():
-    driver = webdriver.Chrome()
+    options = Options()
+    options.set_capability("goog:loggingPrefs", {"performance": "ALL"})
+
+    driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     driver.get(UrbanRoutesData.URL)
+
     yield driver
     driver.quit()
 
