@@ -1,0 +1,55 @@
+import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from UrbanRoutesPage import UrbanRoutesPage
+from data import UrbanRoutesData
+
+
+@pytest.fixture
+def driver():
+    options = Options()
+    options.set_capability("goog:loggingPrefs", {"performance": "ALL"})
+
+    driver = webdriver.Chrome(options=options)
+    driver.maximize_window()
+    driver.get(UrbanRoutesData.URL)
+
+    yield driver
+    driver.quit()
+
+
+def test_complete_taxi_order(driver):
+
+    page = UrbanRoutesPage(driver)
+
+    page.enter_from_address(UrbanRoutesData.FROM_ADDRESS)
+    page.enter_to_address(UrbanRoutesData.TO_ADDRESS)
+
+    page.click_request_taxi()
+
+    page.select_comfort()
+
+    # escribir teléfono
+    page.add_phone_number(UrbanRoutesData.PHONE_NUMBER)
+
+    page.open_payment_method()
+
+    page.add_card(
+        UrbanRoutesData.CARD_NUMBER,
+        UrbanRoutesData.CARD_CODE
+    )
+
+    page.click_card_area()
+
+    page.close_card_window()
+
+    page.add_message_for_driver("Por favor trae pañuelos")
+
+    page.activate_blanket_switch()
+
+    page.request_ice_cream()
+
+    page.order_taxi()
