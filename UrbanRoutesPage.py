@@ -120,28 +120,34 @@ class UrbanRoutesPage:
     def add_message_for_driver(self, message):
         self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.MESSAGE_FOR_DRIVER_INPUT)).send_keys(message)
 
-    def activate_blanket_switch(driver):
+    def activate_blanket_switch(self):
         wait = WebDriverWait(self.driver, 10)
 
         # Espera a que el switch esté clickeable
         blanket_switch = wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, "//div[text()='Manta y pañuelos']/following-sibling::div//input[@type='checkbox']")
-            )
+            EC.presence_of_element_located(UrbanRoutesLocators.BLANKET_TISSUES_SWITCH)
+    )
+
+    # Hacer scroll para asegurarse que sea visible
+        self.driver.execute_script("arguments[0].scrollIntoView();", blanket_switch)
+
+    # Hacer clic con JavaScript
+        self.driver.execute_script("arguments[0].click();", blanket_switch)
+
+    def add_two_ice_creams(self):
+
+        plus_button = self.wait.until(
+        EC.element_to_be_clickable(UrbanRoutesLocators.ICE_CREAM_PLUS)
         )
 
-        # Solo hacer clic si no está activado
-        if not blanket_switch.is_selected():
-            blanket_switch.click()
+        # click 1
+        plus_button.click()
 
-    def request_icecream(self):
-        ice_cream = self.wait.until(
-        EC.presence_of_element_located(UrbanRoutesLocators.ICECREAM_BUTTON)
-        )
-        self.driver.execute_script("arguments[0].click();", ice_cream)
+        # click 2
+        plus_button.click()
 
     def order_taxi(self):
         order_button = self.wait.until(
-        EC.element_to_be_clickable(UrbanRoutesLocators.ORDER_BUTTON)
+        EC.element_to_be_clickable(UrbanRoutesLocators.ORDER_TAXI_BUTTON)
         )
         order_button.click()

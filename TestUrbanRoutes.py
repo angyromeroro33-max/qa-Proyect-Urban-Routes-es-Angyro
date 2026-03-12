@@ -50,6 +50,6 @@ def test_complete_taxi_order(driver):
 
     page.activate_blanket_switch()
 
-    page.request_ice_cream()
+    page.add_two_ice_creams()
 
     page.order_taxi()

@@ -32,8 +32,9 @@ class UrbanRoutesLocators:
 
     MESSAGE_FOR_DRIVER_INPUT = (By.ID, "comment")
     #Extras
-    BLANKET_TISSUES_SWITCH = (By.XPATH, "//div[contains(@class,'switch-container') and .//span[text()='Manta y pañuelos']]")
+    BLANKET_TISSUES_SWITCH = (By.CLASS_NAME, 'switch-input')
 
-    ICECREAM_BUTTON = (By.XPATH, "//span[text()='Helado']/ancestor::div[contains(@class,'r-counter')]")
+    ICE_CREAM_PLUS = (By.CSS_SELECTOR, ".counter-plus")
 
-    ORDER_BUTTON = (By.XPATH, "//button[contains(text()='Ordenar']")
+
+    ORDER_TAXI_BUTTON = (By.XPATH, "//button[.//span[text()='Pedir un taxi']]")
