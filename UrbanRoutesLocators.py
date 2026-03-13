@@ -38,3 +38,7 @@ class UrbanRoutesLocators:
 
 
     ORDER_TAXI_BUTTON = (By.XPATH, "//button[.//span[text()='Pedir un taxi']]")
+
+    DRIVER_INFO_MODAL = (By.CLASS_NAME, 'order-btn-group')
+
+    DETAILS_BUTTON = (By.XPATH, "//div[@class='order-btn-group'][3]")

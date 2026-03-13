@@ -33,7 +33,7 @@ class UrbanRoutesPage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.wait = WebDriverWait(driver, 15)
+        self.wait = WebDriverWait(driver, 60)
 
     def enter_from_address(self, address):
         self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.FROM_INPUT)).send_keys(address)
@@ -151,3 +151,4 @@ class UrbanRoutesPage:
         EC.element_to_be_clickable(UrbanRoutesLocators.ORDER_TAXI_BUTTON)
         )
         order_button.click()
+        self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.DETAILS_BUTTON)).click()

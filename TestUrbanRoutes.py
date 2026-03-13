@@ -53,3 +53,4 @@ def test_complete_taxi_order(driver):
     page.add_two_ice_creams()
 
     page.order_taxi()
+

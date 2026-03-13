@@ -1,5 +1,5 @@
 class UrbanRoutesData:
-    URL = "https://cnt-ee8e41a0-4a49-4736-9cd5-b83b3c45d243.containerhub.tripleten-services.com?lng=es"
+    URL = "https://cnt-64e57e63-3022-48ed-9cc8-e114d7bc46ed.containerhub.tripleten-services.com?lng=es"
 
     FROM_ADDRESS = "East 2nd Street, 601"
     TO_ADDRESS = "1300 1st St"
