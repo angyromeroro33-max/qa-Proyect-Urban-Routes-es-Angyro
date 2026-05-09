@@ -78,18 +78,6 @@ pytest
 
 Pytest ejecutará automáticamente el escenario de prueba y mostrará los resultados en la terminal.
 
----
-
-💡 Nota sobre el nombre del repositorio
-
-Es posible que el nombre de este repositorio sea diferente al del repositorio original que se clonó inicialmente.
-
-Durante el desarrollo del proyecto trabajé en dos computadoras diferentes, lo que ocasionó algunos conflictos relacionados con el entorno y la configuración del proyecto. Después de consultar con los instructores, la mejor solución fue crear nuevamente el proyecto desde cero y continuar el desarrollo en un entorno limpio.
-
-Por esta razón, el nombre de este repositorio es diferente al del repositorio original.
-
-
-
 🌱 Aprendizajes obtenidos
 
 Este proyecto me permitió desarrollar y practicar habilidades importantes dentro del área de QA Automation, como:
@@ -110,4 +98,4 @@ Este proyecto representa un avance importante en mi formación como futura QA Au
 
 Cada reto que surgió durante el desarrollo fue una oportunidad para aprender más sobre herramientas de automatización y buenas prácticas en pruebas de software.
 
-¡Gracias por tomarte el tiempo de revisar este proyecto! 😊
+¡Gracias por tomarte el tiempo de revisar mi proyecto! 😊

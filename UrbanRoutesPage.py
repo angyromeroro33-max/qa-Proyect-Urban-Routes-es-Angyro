@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from UrbanRoutesLocators import UrbanRoutesLocators
 from Helpers import retrieve_phone_code
 
-
+#Constructor
 class UrbanRoutesPage:
 
     def __init__(self, driver):
@@ -12,10 +12,10 @@ class UrbanRoutesPage:
         self.wait = WebDriverWait(driver, 60)
 
     def enter_from_address(self, address):
-        self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.FROM_INPUT)).send_keys(address)
+        self.wait.until(EC.presence_of_element_located(UrbanRoutesLocators.FROM_INPUT)).send_keys(address)
 
     def enter_to_address(self, address):
-        self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.TO_INPUT)).send_keys(address)
+        self.wait.until(EC.presence_of_element_located(UrbanRoutesLocators.TO_INPUT)).send_keys(address)
 
     def click_request_taxi(self):
         self.wait.until(EC.element_to_be_clickable(UrbanRoutesLocators.REQUEST_TAXI_BUTTON)).click()
@@ -25,7 +25,7 @@ class UrbanRoutesPage:
 
     def add_phone_number(self, phone):
         #Abrir ventana de teléfono
-        self.wait.until(EC.element_to_be_clickable(UrbanRoutesLocators.PHONE_BUTTON)).click()
+        self.wait.until(EC.presence_of_element_located(UrbanRoutesLocators.PHONE_BUTTON)).click()
 
         #Escribir el número
         self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.PHONE_INPUT)).send_keys(phone)
@@ -128,3 +128,38 @@ class UrbanRoutesPage:
         )
         order_button.click()
         self.wait.until(EC.visibility_of_element_located(UrbanRoutesLocators.DETAILS_BUTTON)).click()
+
+    def verify_from_address(self, expected_address):
+        value = self.driver.find_element(*UrbanRoutesLocators.FROM_INPUT).get_attribute("value")
+        assert value == expected_address
+
+    def verify_comfort_visible(self):
+        assert self.driver.find_element(*UrbanRoutesLocators.COMFORT_TARIFF).is_displayed()
+
+    def verify_phone_number(self, expected_phone):
+        phone = self.driver.find_element(*UrbanRoutesLocators.PHONE_BUTTON).text
+        assert phone == expected_phone
+
+    def verify_payment_method_button(self):
+        btn_pago = self.wait.until(
+            EC.element_to_be_clickable(UrbanRoutesLocators.PAYMENT_METHOD_BUTTON)
+        )
+        assert btn_pago.is_displayed()
+
+    def verify_driver_message(self, expected_message):
+        message = self.driver.find_element(*UrbanRoutesLocators.MESSAGE_FOR_DRIVER_INPUT).get_attribute("value")
+        assert message == expected_message
+
+    def verify_blanket_switch(self):
+        assert self.driver.find_element(*UrbanRoutesLocators.BLANKET_TISSUES_SWITCH).is_selected()
+
+    def wait_for_driver(self):
+        WebDriverWait(self.driver, 60).until_not(
+            EC.text_to_be_present_in_element(
+                (By.CLASS_NAME, "order-header-content"),
+                "Buscar automóvil"
+            )
+        )
+
+    def verify_order_screen(self):
+        assert self.driver.find_element(By.CLASS_NAME, "order-header-content").is_displayed()
